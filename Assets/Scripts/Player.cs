@@ -11,20 +11,14 @@ public class Player : MonoBehaviour
     private bool hasStarted;
     private Rigidbody2D rb2D;
 
-    void Start()
-    {
+    void Start() {
         rb2D = GetComponent<Rigidbody2D>();
         rb2D.gravityScale = 0;
         hasStarted = false;
         isAlive = true;
     }
 
-    void Update()
-    {
-        // Face current velocity direction
-        Vector2 direction = rb2D.velocity.normalized;
-        transform.rotation = Quaternion.FromToRotation(Vector2.right, direction);
-
+    void Update() {
         // Don't allow input if the player is dead
         if (!isAlive) {
             return;
@@ -46,6 +40,10 @@ public class Player : MonoBehaviour
         if (hasStarted) {
             rb2D.velocity = new Vector2(moveSpeed, rb2D.velocity.y);
         }
+
+        // Face current velocity direction
+        Vector2 direction = rb2D.velocity.normalized;
+        transform.rotation = Quaternion.FromToRotation(Vector2.right, direction);
     }
 
     public void Die() {
@@ -54,5 +52,6 @@ public class Player : MonoBehaviour
 
     public void Freeze() {
         rb2D.isKinematic = true;
+        rb2D.velocity = Vector2.zero;
     }
 }
