@@ -6,8 +6,11 @@ public class Player : MonoBehaviour
 {
     public float moveSpeed = 3f;
     public float jumpForce = 5f;
+    public float maxAngle = 15f;
+    public float rotationSpeed = 0.2f;
 
     private bool isAlive;
+    private bool isFrozen;
     private bool hasStarted;
     private Rigidbody2D rb2D;
 
@@ -16,6 +19,7 @@ public class Player : MonoBehaviour
         rb2D.gravityScale = 0;
         hasStarted = false;
         isAlive = true;
+        isFrozen = true;
     }
 
     void Update() {
@@ -26,10 +30,12 @@ public class Player : MonoBehaviour
 
         // If the user clicked/tapped or pressed spacebar
         if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.Space)) {
-            // Do stuff the first time the user taps
+            // Start the game on the first tap
             if (!hasStarted) {
+                GameController.instance.StartGame();
                 rb2D.gravityScale = 1;
                 hasStarted = true;
+                isFrozen = false;
             }
 
             // Add jump force
@@ -40,17 +46,31 @@ public class Player : MonoBehaviour
         if (hasStarted) {
             rb2D.velocity = new Vector2(moveSpeed, rb2D.velocity.y);
         }
+    }
+
+    void FixedUpdate() {
+        // Don't allow re-orientation if player is frozen
+        if (isFrozen) {
+            return;
+        }
 
         // Face current velocity direction
-        Vector2 direction = rb2D.velocity.normalized;
-        transform.rotation = Quaternion.FromToRotation(Vector2.right, direction);
+        Vector2 lookDirection = rb2D.velocity.normalized;
+        if (rb2D.velocity.y > -jumpForce) {
+            Quaternion maxRotation = Quaternion.AngleAxis(maxAngle, Vector3.forward);
+            lookDirection = maxRotation * Vector2.right;
+        }
+        Quaternion targetRotation = Quaternion.FromToRotation(Vector2.right, lookDirection);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed);
     }
 
     public void Die() {
         isAlive = false;
+        rb2D.velocity = new Vector2(0, rb2D.velocity.y);
     }
 
     public void Freeze() {
+        isFrozen = true;
         rb2D.isKinematic = true;
         rb2D.velocity = Vector2.zero;
     }
