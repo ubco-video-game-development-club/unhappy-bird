@@ -13,13 +13,16 @@ public class Player : MonoBehaviour
     private bool isFrozen;
     private bool hasStarted;
     private Rigidbody2D rb2D;
+    private Animator animator;
 
     void Start() {
         rb2D = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         rb2D.gravityScale = 0;
         hasStarted = false;
         isAlive = true;
         isFrozen = true;
+        animator.SetBool("IsActive", false);
     }
 
     void Update() {
@@ -36,6 +39,7 @@ public class Player : MonoBehaviour
                 rb2D.gravityScale = 1;
                 hasStarted = true;
                 isFrozen = false;
+                animator.SetBool("IsActive", true);
             }
 
             // Add jump force
@@ -65,12 +69,16 @@ public class Player : MonoBehaviour
     }
 
     public void Die() {
-        isAlive = false;
-        rb2D.velocity = new Vector2(0, rb2D.velocity.y);
+        if (isAlive) {
+            GameController.instance.EndGame();
+            isAlive = false;
+            rb2D.velocity = new Vector2(0, rb2D.velocity.y);
+        }
     }
 
     public void Freeze() {
         isFrozen = true;
+        animator.SetBool("IsActive", false);
         rb2D.isKinematic = true;
         rb2D.velocity = Vector2.zero;
     }
