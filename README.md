@@ -1,2 +1,4 @@
-# unhappy-bird
-A game challenge to create a game as mechanically close to Flappy Bird as possible.
+# Unhappy Bird
+It's like Flappy Bird, but sad!
+
+Created by Jaden Balogh and Adam Collins.
