@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 {
     public float moveSpeed = 3f;
     public float jumpForce = 5f;
+    public float fallThreshold = -3f;
     public float maxAngle = 15f;
     public float rotationSpeed = 0.2f;
     public AudioClip flapSound;
@@ -69,7 +70,7 @@ public class Player : MonoBehaviour
 
         // Face current velocity direction
         Vector2 lookDirection = rb2D.velocity.normalized;
-        if (rb2D.velocity.y > -jumpForce) {
+        if (rb2D.velocity.y > fallThreshold) {
             Quaternion maxRotation = Quaternion.AngleAxis(maxAngle, Vector3.forward);
             lookDirection = maxRotation * Vector2.right;
         }

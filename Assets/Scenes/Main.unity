@@ -1514,7 +1514,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1156511373
 MonoBehaviour:
@@ -1927,8 +1927,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &1417148814
-BoxCollider2D:
+--- !u!60 &1417148814
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1940,7 +1940,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.06}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1950,9 +1950,16 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.97, y: 0.7}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.25460356, y: 0.32142025}
+      - {x: -0.07201558, y: 0.08477235}
+      - {x: -0.49255678, y: 0.070825204}
+      - {x: -0.49633574, y: -0.21048214}
+      - {x: -0.2984382, y: -0.36082357}
+      - {x: 0.08482963, y: -0.38315326}
+      - {x: 0.47394866, y: -0.0133518195}
+      - {x: 0.47394878, y: 0.1316185}
 --- !u!50 &1417148815
 Rigidbody2D:
   serializedVersion: 4
@@ -1986,8 +1993,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad43ba08313f56b40935221e30785142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3.5
-  jumpForce: 6
+  moveSpeed: 4
+  jumpForce: 8.5
+  fallThreshold: -7
   maxAngle: 15
   rotationSpeed: 5
   flapSound: {fileID: 8300000, guid: 374b83a0b9a2cf14e8f55c018e954e14, type: 3}
@@ -2040,7 +2048,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1453032788
 MonoBehaviour:
@@ -2060,9 +2068,9 @@ MonoBehaviour:
     type: 3}
   checkpointPrefab: {fileID: 4095579852226306669, guid: 84274fae751dfb14b9b4dafd5d4b8961,
     type: 3}
-  pipeSpawnGapDistance: 5
-  pipeWidth: 1.8
-  pipeGapHeight: 3
+  pipeSpawnGapDistance: 5.2
+  pipeWidth: 2
+  pipeGapHeight: 2.8
   maxTopPipeOffset: 0.5
   minBottomPipeOffset: 3
   checkpointWidth: 0.1
