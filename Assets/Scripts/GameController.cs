@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -25,8 +24,6 @@ public class GameController : MonoBehaviour
     private float prevSpawnX;
     private int score;
     private int bestScore;
-
-    private const string savePath = "Assets/Resources/Best.txt";
 
     void Awake() {
         if (instance != null) {
@@ -119,18 +116,15 @@ public class GameController : MonoBehaviour
     }
 
     private void SaveBestScore() {
-        StreamWriter writer = new StreamWriter(savePath);
-        writer.Write(score);
-        writer.Close();
+        PlayerPrefs.SetInt("BestScore", bestScore);
+        PlayerPrefs.Save();
     }
 
     private int LoadBestScore() {
-        StreamReader reader = new StreamReader(savePath);
-        int best;
-        if (!System.Int32.TryParse(reader.ReadLine(), out best)) {
-            best = 0;
-        }
-        reader.Close();
-        return best;
+        return PlayerPrefs.GetInt("BestScore", 0);
+    }
+
+    private void ClearBestScore() {
+        PlayerPrefs.DeleteAll();
     }
 }
