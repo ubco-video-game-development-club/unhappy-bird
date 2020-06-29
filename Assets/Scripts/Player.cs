@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour
 {
@@ -33,22 +34,25 @@ public class Player : MonoBehaviour
             return;
         }
 
-        // If the user clicked/tapped or pressed spacebar
-        if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.Space)) {
-            // Start the game on the first tap
-            if (!hasStarted) {
-                GameController.instance.StartGame();
-                rb2D.gravityScale = 1;
-                hasStarted = true;
-                isFrozen = false;
-                animator.SetBool("IsActive", true);
+        // If we aren't clicking the UI
+        if (!EventSystem.current.IsPointerOverGameObject()) {
+            // If the user clicked/tapped or pressed spacebar
+            if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.Space)) {
+                // Start the game on the first tap
+                if (!hasStarted) {
+                    GameController.instance.StartGame();
+                    rb2D.gravityScale = 1;
+                    hasStarted = true;
+                    isFrozen = false;
+                    animator.SetBool("IsActive", true);
+                }
+
+                // Add jump force
+                rb2D.velocity = new Vector2(rb2D.velocity.x, jumpForce);
+
+                // Play flap sound
+                AudioSource.PlayClipAtPoint(flapSound, Camera.main.transform.position);
             }
-
-            // Add jump force
-            rb2D.velocity = new Vector2(rb2D.velocity.x, jumpForce);
-
-            // Play flap sound
-            AudioSource.PlayClipAtPoint(flapSound, Camera.main.transform.position);
         }
 
         // Constant forward velocity
