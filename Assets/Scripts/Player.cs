@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     public float jumpForce = 5f;
     public float maxAngle = 15f;
     public float rotationSpeed = 0.2f;
+    public AudioClip flapSound;
+    public AudioClip deathSound;
 
     private bool isAlive;
     private bool isFrozen;
@@ -44,6 +46,9 @@ public class Player : MonoBehaviour
 
             // Add jump force
             rb2D.velocity = new Vector2(rb2D.velocity.x, jumpForce);
+
+            // Play flap sound
+            AudioSource.PlayClipAtPoint(flapSound, Camera.main.transform.position);
         }
 
         // Constant forward velocity
@@ -73,6 +78,7 @@ public class Player : MonoBehaviour
             GameController.instance.EndGame();
             isAlive = false;
             rb2D.velocity = new Vector2(0, rb2D.velocity.y);
+            AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position);
         }
     }
 

@@ -8,6 +8,7 @@ public class Checkpoint : MonoBehaviour
         Player player;
         if (col.TryGetComponent<Player>(out player)) {
             GameController.instance.AddScore();
+            Destroy(gameObject);
         }
     }
 }

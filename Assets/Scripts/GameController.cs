@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     public float maxTopPipeOffset = 0.5f;
     public float minBottomPipeOffset = 2.5f;
     public float checkpointWidth = 0.1f;
+    public AudioClip scoreSound;
 
     private bool isSpawning;
     private float screenTop;
@@ -46,6 +47,7 @@ public class GameController : MonoBehaviour
     public void AddScore() {
         score++;
         HUD.instance.SetScore(score);
+        AudioSource.PlayClipAtPoint(scoreSound, Camera.main.transform.position);
     }
 
     public void StartGame() {
@@ -113,7 +115,7 @@ public class GameController : MonoBehaviour
         float checkpointHeight = topPipeOffset - bottomPipeOffset;
         Vector2 checkpointSpawnPos = new Vector2(spawnPositionX, gapPositionY);
         GameObject checkpoint = Instantiate(checkpointPrefab, checkpointSpawnPos, Quaternion.identity);
-        bottomPipe.GetComponent<BoxCollider2D>().size = new Vector2(checkpointWidth, checkpointHeight);
+        checkpoint.GetComponent<BoxCollider2D>().size = new Vector2(checkpointWidth, checkpointHeight);
     }
 
     private void SaveBestScore() {

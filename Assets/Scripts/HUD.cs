@@ -14,6 +14,7 @@ public class HUD : MonoBehaviour
     public Text finalScoreText;
     public Text bestScoreText;
     public Color highlightColor;
+    public float fadeTime = 1f;
 
     void Awake() {
         if (instance != null) {
@@ -48,8 +49,24 @@ public class HUD : MonoBehaviour
     }
 
     private void EnableMenu(CanvasGroup menu, bool enabled) {
-        menu.alpha = enabled ? 1 : 0;
+        StartCoroutine(FadeMenu(menu, enabled));
         menu.blocksRaycasts = enabled;
         menu.interactable = enabled;
+    }
+
+    private IEnumerator FadeMenu(CanvasGroup menu, bool fadeIn) {
+        // get the initial alpha of the menu
+        float startAlpha = menu.alpha;
+        
+        // determine whether we are fading in or out
+        float targetAlpha = fadeIn ? 1 : 0;
+
+        // fade the menu over fadeTime seconds
+        float f = 0;
+        while (f < fadeTime) {
+            f += Time.deltaTime;
+            menu.alpha = Mathf.Lerp(startAlpha, targetAlpha, f / fadeTime);
+            yield return null;
+        }
     }
 }
