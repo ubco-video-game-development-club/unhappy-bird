@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -37,8 +39,14 @@ public class GameController : MonoBehaviour
         isSpawning = false;
         screenTop = Camera.main.ScreenToWorldPoint(Screen.height * Vector2.up).y;
         screenBottom = Camera.main.ScreenToWorldPoint(Vector2.zero).y;
-        bestScore = LoadBestScore();
-        HUD.instance.SetBestScore(bestScore);
+
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
+        PlayGamesPlatform.DebugLogEnabled = true;
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.Activate();
+        PlayGamesPlatform.Instance.Authenticate(success => {
+            LoadBestScore();
+        });
     }
 
     public void AddScore() {
@@ -116,12 +124,30 @@ public class GameController : MonoBehaviour
     }
 
     private void SaveBestScore() {
-        PlayerPrefs.SetInt("BestScore", bestScore);
-        PlayerPrefs.Save();
+        if (PlayGamesPlatform.Instance.localUser.authenticated) {
+            PlayGamesPlatform.Instance.ReportScore(
+                bestScore,
+                GPGSIds.leaderboard_top_scores,
+                success => {}
+            );
+        }
     }
 
-    private int LoadBestScore() {
-        return PlayerPrefs.GetInt("BestScore", 0);
+    private void LoadBestScore() {
+        if (PlayGamesPlatform.Instance.localUser.authenticated) {
+            PlayGamesPlatform.Instance.LoadScores(
+                GPGSIds.leaderboard_top_scores,
+                LeaderboardStart.PlayerCentered,
+                1,
+                LeaderboardCollection.Public,
+                LeaderboardTimeSpan.AllTime,
+                scoreData => {
+                    bestScore = (int)scoreData.PlayerScore.value;
+                    Debug.Log("best: " + bestScore);
+                    HUD.instance.SetBestScore(bestScore);
+                }
+            );
+        }
     }
 
     private void ClearBestScore() {
