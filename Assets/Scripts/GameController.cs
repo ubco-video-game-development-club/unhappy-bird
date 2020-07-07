@@ -74,6 +74,10 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    public void ShowLeaderboard() {
+        PlayGamesPlatform.Instance.ShowLeaderboardUI();
+    }
+
     private IEnumerator SpawnPipes() {
         prevSpawnX = 0;
         isSpawning = true;
